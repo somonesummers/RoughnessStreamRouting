@@ -1,0 +1,5 @@
+.DS_Store
+*.nc
+*.csv
+*.b
+*.mat
