@@ -2,10 +2,12 @@ import pandas as pd
 import numpy as np
 
 #a = [] 
-#i = 0 
-#for chunk in  
-a = pd.read_csv('Smooth_topographic_realization_50.csv',usecols = [3]) 
+for i in range(5):
+	#for chunk in  
+	print('Reading ' + str(i) + '...')
+	a = pd.read_csv('Binary_lake_smooth_topography.csv',usecols = [i]) 
 	#a.append(chunk.values) 
-	# print(i) 
+	print('Saving '+ str(i) +'...') 
 	# i+=1          
-np.array(a).astype('double').tofile('MattsFile3.b')
+	np.array(a).astype('double').tofile('BinarySmooth' + str(i) +'.b')
+
