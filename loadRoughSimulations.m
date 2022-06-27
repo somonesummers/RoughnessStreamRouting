@@ -16,37 +16,39 @@ yy = y(:);
 % 
 %   a = pd.read_csv('Smooth_topographic_realization_50.csv',usecols = [3])
 %   np.array(a).astype('double').tofile('MattsFile3.b')
+for i = 1
+    disp("Running " + i + " now...") 
+%     f = fopen("rough/BinaryRough"+1+".b");
+    f = fopen("MattsFile0.b");
+    depth = [NaN; fread(f,'double')]; %somehow 1 data point got lost
 
-f = fopen('MattsFile3.b');
-depth = [NaN; fread(f,'double')]; %somehow 1 data point got lost
+    % Set bounds of area of interest
+    xmin = -1790000;
+    xmax = -1090000;
+    ymin =  -945000;
+    ymax =    55000;
 
-% Set bounds of area of interest
-xmin = -1790000;
-xmax = -1090000;
-ymin =  -945000;
-ymax =    55000;
+    %% downsize to just Thaites Basin Area, and make a grid
 
-%% downsize to just Thaites Basin Area, and make a grid
-
-dx = 2e3;
-smth = 6e3;
-xi = xmin:dx:xmax;
-yi = ymin:dx:ymax;
-[Xi, Yi] = meshgrid(xi,yi);
-
-
-
-x_th        =    xx((xx < xmax) & (xx > xmin) & (yy < ymax) & (yy > ymin));
-y_th        =    yy((xx < xmax) & (xx > xmin) & (yy < ymax) & (yy > ymin));
-depth_th    = depth((xx < xmax) & (xx > xmin) & (yy < ymax) & (yy > ymin));
+    dx = 5e2;
+    xi = xmin:dx:xmax;
+    yi = ymin:dx:ymax;
+    [Xi, Yi] = meshgrid(xi,yi);
 
 
-depth_interp = scatteredInterpolant(x_th,y_th,depth_th);
 
-bed_depth = depth_interp(Xi,Yi);
-save('Instance3','Xi','Yi','bed_depth')
+    x_th        =    xx((xx < xmax) & (xx > xmin) & (yy < ymax) & (yy > ymin));
+    y_th        =    yy((xx < xmax) & (xx > xmin) & (yy < ymax) & (yy > ymin));
+    depth_th    = depth((xx < xmax) & (xx > xmin) & (yy < ymax) & (yy > ymin));
 
-figure(1)
-clf
-surf(Xi,Yi,bed_depth,'edgecolor','none')
-view(2)
+
+    depth_interp = scatteredInterpolant(x_th,y_th,depth_th);
+
+    bed_depth = depth_interp(Xi,Yi);
+    save("Rough"+i,'Xi','Yi','bed_depth')
+
+    figure(i+1)
+    clf
+    surf(Xi,Yi,bed_depth,'edgecolor','none')
+    view(2)
+end
